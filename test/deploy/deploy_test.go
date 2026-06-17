@@ -139,7 +139,9 @@ var _ = Describe("Manifests deployment", Ordered, Label("manifest"), func() {
 		runCmd(ctx, "make", "build-installer", "IMG="+testImage)
 
 		By("applying installer manifest")
-		runCmd(ctx, "kubectl", "apply", "-f", "dist/install.yaml")
+		// Server-side apply: the generated CRD is too large for the client-side
+		// last-applied-configuration annotation (>256 KiB limit).
+		runCmd(ctx, "kubectl", "apply", "--server-side", "--force-conflicts", "-f", "dist/install.yaml")
 
 		DeferCleanup(func(ctx context.Context) {
 			By("removing installer manifest resources")

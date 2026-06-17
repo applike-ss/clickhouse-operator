@@ -894,6 +894,7 @@ func (r *clickhouseReconciler) reconcileNetworkPolicy(ctx context.Context, log c
 	}
 
 	existing := &networkingv1.NetworkPolicy{}
+
 	err := r.GetClient().Get(ctx, types.NamespacedName{
 		Namespace: r.Cluster.Namespace,
 		Name:      r.Cluster.SpecificName(),
